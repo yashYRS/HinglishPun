@@ -71,5 +71,8 @@ def filter_corpus_sentences(en_words: list) -> dict:
 
 
 def post_process_llm_response(text):
-    # Clean the data (chain of thought) and return only the pun
-    pass
+    if 'Output:' in text:
+        # Clean the data (chain of thought) and return only the pun in case it was followed
+        pun_start = text.index('Output:')
+        return text[pun_start:]
+    return text

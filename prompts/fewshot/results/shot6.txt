@@ -1,0 +1,24 @@
+Step 1:
+EN: "pen"
+HI: "पेन" (pronounced as "pen")
+HI_TO_EN: "pen"
+
+Step 2: 
+"pen" and "pen" are the same, redo Step 1
+
+Step 1:
+EN: "bat"
+HI: "बैट" (pronounced as "bate")
+HI_TO_EN: "cricket bat"
+
+Step 2: 
+"cricket bat" and "bat" are not the same, proceed to Step 3
+
+Step 3:
+Short sentence with "EN" as the object: "She hit the ball with the bat"
+
+Step 4:
+Replace EN with HI: "She hit the ball with the बैट (bat)"
+
+Step 5:
+Output: "She hit the ball with the cricket बैट (bat)"

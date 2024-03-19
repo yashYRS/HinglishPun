@@ -1,0 +1,16 @@
+Step 1:
+EN: "pear"
+HI: "पेयर" (pronounced as "pear")
+HI_TO_EN: "drink"
+
+Step 2:
+"drink" and "pear" are not the same, proceed to Step 3
+
+Step 3:
+Short sentence with "EN" as the object: "She offered a pear to her friend."
+
+Step 4:
+Replace EN with HI: "She offered a पेयर (pear) to her friend."
+
+Step 5:
+Output: "She offered a drink to her friend."
