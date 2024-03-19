@@ -1,4 +1,7 @@
+import tqdm
 import spacy
+import ast
+import json
 from pathlib import Path
 
 from nltk import pos_tag
@@ -14,42 +17,49 @@ from src.homophone_gen import HomophoneGenerator
 
 class PunGenerator:
 
-    def __init__(self, homophone_df_path: Path, load_homophone: bool=False):
+    def __init__(self, homophone_df_path: Path, load_homophone: bool=False, method='homophone'):
         
-        self.top_n_context_thresh = 5
-        self.spacy_en = spacy.load("en_core_web_sm")
+        if method == 'homophone':
+            self.top_n_context_thresh = 5
+            self.spacy_en = spacy.load("en_core_web_sm")
+            self.noun_pos_tags = set(['NN', 'NNS', 'NNP', 'NNPS'])
 
-        # Load pre-trained Word2Vec model
-        self.embedding_model = api.load("glove-twitter-200")
-        self.embedding_vocab : set = set(self.embedding_model.index_to_key)
-        
-        if load_homophone is True:
-            # If homophones have already been generated, load the file 
-            self.homophone_gen = HomophoneGenerator(load_df_file=homophone_df_path)
-        else:
-            # Create the homophone df from scratch
-            self.homophone_gen = HomophoneGenerator(save_df_file=homophone_df_path)
-            self.homophone_gen.get_homophones_df()
-            self.get_sentences_per_en()
-            self.save_homophone_df()
+            # Load pre-trained Word2Vec model
+            self.embedding_model = api.load("glove-twitter-25")
+            self.embedding_vocab : set = set(self.embedding_model.index_to_key)
+            
+            if load_homophone is True:
+                # If homophones have already been generated, load the file 
+                self.homophone_gen = HomophoneGenerator(load_df_file=homophone_df_path)
+                homophone_df = self.homophone_gen.homophone_df
+                homophone_df['candidate_sentences'] = homophone_df['candidate_sentences'].apply(ast.literal_eval)
+                homophone_df['dvng_hi'] = homophone_df['dvng_hi'].apply(ast.literal_eval)
+                homophone_df['latin_hi'] = homophone_df['latin_hi'].apply(ast.literal_eval)
+                homophone_df['translated_hi_en'] = homophone_df['translated_hi_en'].apply(ast.literal_eval)
+            else:
+                # Create the homophone df from scratch
+                self.homophone_gen = HomophoneGenerator(save_df_file=homophone_df_path)
+                self.homophone_gen.get_homophones_df()
+                self.get_sentences_per_en()
+                self.save_homophone_df()
 
-        self.llm_client = OpenAI()
+        elif method == 'prompt':
+            self.llm_client = OpenAI()
+
         self.pun_list = []
 
-    def replace_noun_phrase(self, input_sentence, word_context_change, word_en, word_replace):
-        # Get the spacy text object for the input sentence
-        text_obj = self.spacy_en(input_sentence)
-
-        # Replace the english word with the transliterated hindi word
+    def replace_noun_for_pun(self, input_sentence, pos_sequence, word_context_change):
         # Possible to improve this function a bit
-        input_sentence = input_sentence.replace(word_en, word_replace)
-
         # Extract noun phrases
-        noun_phrases = [n.text for n in text_obj.noun_chunks]
-        if len(noun_phrases) == []:
+        sent_nouns = [i for i, p in pos_sequence if p in self.noun_pos_tags]
+        pos_sequence = [p for _, p in pos_sequence]
+        if len(sent_nouns) == 0:
             return
 
+        # Use the 1st Noun of the sentence
+        reqd_noun = sent_nouns[0]
         similar_words = []
+
         # Check if input word is in the vocabulary
         if word_context_change in self.embedding_vocab:
             # Get most similar words
@@ -57,21 +67,33 @@ class PunGenerator:
 
             # Return the first similar word
             for reqd_word, _ in similar_words:
-                if utils.is_noun(reqd_word):
+                if utils.is_noun(reqd_word) is True:
                     # Replace the first noun phrase in the input sentence
-                    new_sentence = input_sentence.replace(noun_phrases[0], reqd_word, 1)
-
+                    new_sentence = [i if i != reqd_noun else reqd_word for i in input_sentence]
                     # Add the generated sentence to the pun list
-                    self.pun_list.append(new_sentence)
+                    self.pun_list.append(' '.join(new_sentence))
 
-    
     def get_pun_from_translated_context(self):
 
-        for _, row in self.homophone_gen.homophone_df.iterrows():
+        for _, row in tqdm.tqdm(self.homophone_gen.homophone_df.iterrows()):
             # For all the sentences where the row 'en' word appears at the end, try to create puns
             # by replace the noun at the start with a potential context word of the associated homophone word
             for input_sentence in row.candidate_sentences:
-                self.replace_noun_phrase(input_sentence, row.translated_hi_en, row.en, row.latin_hi)
+                if len(input_sentence) > 25:
+                    continue
+
+                for hi_word, translate_word in zip(row.dvng_hi, row.translated_hi_en):
+                    # If the meanings of the homophones are the same, don't create the pun
+                    if translate_word.lower() == row.en:
+                        continue
+                    new_sentence = [i if i != row.en else hi_word for i in input_sentence]
+                    if input_sentence == new_sentence:
+                        continue
+                    new_pos_sequence = pos_tag(new_sentence)
+                    self.replace_noun_for_pun(input_sentence, new_pos_sequence, translate_word)
+
+            with open('data/pun_list.json', 'w') as f:
+                json.dump(self.pun_list, f)
 
     def clean_llm_results():
         pass
@@ -120,6 +142,3 @@ class PunGenerator:
 
             # Write the raw response received from the LLM to the result files
             utils.write_file(response, result_file)
-            
-
-                
