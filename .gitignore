@@ -1,4 +1,5 @@
-hinglish/**
 .DS_Store
 flite**
 *.txt
+.venv/**
+data/L3Cubedata/**
