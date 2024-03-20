@@ -1,5 +1,6 @@
 import tqdm
 import nltk
+import epitran
 import pandas as pd
 from thefuzz import fuzz
 from pathlib import Path
@@ -29,12 +30,20 @@ def write_file(data, file_path: Path):
 
 
 def retrieve_common_words() -> tuple[list, list]:
+    """From the common Hindi & English corpuses read the common words
+    clean formatting, wherever necessary and return the corresponding lists
+
+    Returns:
+        tuple[list, list]: List of Common English words, List of Common Hindi words
+    """    
     df = pd.read_csv(words_file_hi)
     hindi_words = df['word'].tolist()
 
     with open(words_file_en) as f:
         english_words = f.readlines()
 
+    # Filter out English words that don't appear in the Brown corpus to be able to 
+    # create candidate sentences easily
     brown_words = set(brown.words())
     english_words = [w.replace('\n', '') for w in english_words]
     english_words = [w for w in english_words if len(w) > 2 and w in brown_words]
@@ -42,29 +51,59 @@ def retrieve_common_words() -> tuple[list, list]:
     return english_words, hindi_words
 
 
-def get_homophone_en_hi(word_en: list, ipas_hi: dict, epi_en, thresh: int=75):
+def get_homophone_en_hi(word_en: str, ipas_hi: dict, epi_en: epitran._epitran.Epitran, thresh: int=75):
+    """
+    Perform Minimum Edit distance between hindi ipas and english ipa
+    Sort the hindi words with decreasing similarity with the English word
+    Filter out words where the similarity is below the given threshold
+
+    Args:
+        word_en (str): English word for which corresponding hindi homophones need to be found
+        ipas_hi (dict): Hindi word to IPA mapping
+        epi_en (epitran._epitran.Epitran): Epitran object for English for getting it's IPA
+        thresh (int, optional): Minimum Similarity between IPAs to be considered homophonic. Defaults to 75
+
+    Returns:
+        str, list: English word, List of hindi words which are homophones of the given English word
+    """    
     ipa_en = epi_en.transliterate(word_en)
+
     # Apply fuzzy matching to get relatively similar ipas
     words_hi = [(word_hi, fuzz.ratio(ipa_en, ipa_hi)) for word_hi, ipa_hi in ipas_hi.items()]
+
     # Filter out words that don't match phonetically
     words_hi = [(w, score) for w, score in words_hi if score > thresh]
+
     # Sort words based on the matching score
     words_hi = sorted(words_hi, key=lambda x: x[1], reverse=True)
+
     # Remove the scores from the list and just keep the hi word
     words_hi = [w for w, _ in words_hi]
+
     return (word_en, words_hi)
 
 
 def filter_corpus_sentences(en_words: list) -> dict:
+    """Select sentences from the Brown corpus where the given english words appear towards the end
+
+    Args:
+        en_words (list): List of english words for which sentences need to be found
+
+    Returns:
+        dict: word to candidate sentences mapping
+    """    
     all_sentences = brown.sents()
     en_candidates = defaultdict(list)
     
     # Go over all sentences in the corpus
     for curr_sent in tqdm.tqdm(all_sentences):
+
         # Convert list of words in the sentence to a set of words for faster membership inference
         set_sent = set(curr_sent)
+
         # Half the length of the sentence stored, to check if word will lie in the 2nd half of the sentence
         half_len = len(curr_sent)/2
+
         for en_word in en_words:
             # For all the given words, if they appear in the sentence
             # and they appear in the 2nd half of the sentence (towards the end)
@@ -72,49 +111,86 @@ def filter_corpus_sentences(en_words: list) -> dict:
             # from which puns will be generated
             if en_word in set_sent and curr_sent.index(en_word) > half_len:
                 en_candidates[en_word].append(curr_sent)
+
     return en_candidates
 
 def get_homophone_pairs(df: pd.DataFrame, len_thresh: int=3):
-    # Convert homophone pairs to a list of string inputs
-    # Filter out as many candidates as possible to minimise LLM costs
-    column_list = ['en', 'latin_hi', 'translated_hi_en']
-    df = df[column_list]
+    """Query and filter out homophonic pairs from the dataframe and convert it to prompts
+
+    Args:
+        df (pd.DataFrame): Dataframe containing homophones
+        len_thresh (int, optional): Difference in length between Hindi and English. Defaults to 3.
+
+    Returns:
+        list: List of strings that represents the input prompt containing Hindi English homophones 
+    """
+    # Initialising list of homophone pairs
+    homophone_pairs = []
     
-    string_list = []
     for _, row in df.iterrows():
-        en_word, hi_list, translated_list = row.en, row.latin_hi, row.translated_hi_en
+        # To limit the number of homophones while maintaining diversity
+        # if a homophone has been found for a English word, we move on to the next one
         added_homophone = False
+        en_word, hi_list, translated_list = row.en, row.latin_hi, row.translated_hi_en
+        
         for hi_word, hi_translated in zip(hi_list, translated_list):
+        
             if len(hi_word) < len_thresh or added_homophone is True:
                 # If the hi word is too short remove or if a homophonic pair has already been added
                 # for the given english word then move on to a different english word
                 continue
+        
             if fuzz.ratio(hi_translated.lower(), hi_word) > 50:
                 # The hi word is most probably a borrowed word, hence skip
                 continue
-            # The transliterated word is of similar length to the english word & the homophonic word
-            # doesn't mean the same thing it does in English
+        
+            # The transliterated word should be of similar length to the english word
+            # The homophonic word shouldn't mean the same thing in Hindi as it does in English        
             if abs(len(en_word) - len(hi_word)) < len_thresh and fuzz.ratio(hi_translated.lower(), en_word) < 85:
-                added_homophone = True
                 # Create the string that will be appended to the prompts
-                string_list.append('Input: "{}", "{}" ({})'.format(en_word, hi_word, hi_translated))
-    return string_list
+                homophone_pairs.append('Input: "{}", "{}" ({})'.format(en_word, hi_word, hi_translated))
+                added_homophone = True
+
+    return homophone_pairs
 
 
 
 def post_process_llm_response(text):
+    """
+    Args:
+        text (str): Longer text, containing chain of thought as well as the final pun
+
+    Returns:
+        str: Filtered out text, containing only the joke, and nothing else
+    """
     if 'Output:' in text:
-        # Clean the data (chain of thought) and return only the pun in case it was followed
         pun_start = text.index('Output:')
         return text[pun_start:]
     return text
 
 
 def read_and_clean_tsv(dataset_path):
+    """Clean the TSV file containing ground truth annotations of transliterations of the 
+    Google Research Team - Dakhsina Dataset for evaluating transliteration module
+
+    Args:
+        dataset_path (Path): path to the dataset (.tsv) file
+
+    Returns:
+        pd.Dataframe: Columns containing the Hindi word and the corresponding ground truth 
+            latin transliteration
+    """    
     df = pd.read_csv(dataset_path, sep = '\t')
+
     # Push the column to be a row, since the dataset directly starts with
-    # transliteration pairs, so push current column names to a row, and add new column names
+    # transliteration pairs, so push current column names to a row
     df.loc[-1] = df.columns
+    # Reset index due to the presence of the new row
     df = df.sort_index().reset_index(drop=True)
+    # Rename columns
     df.columns = ['hi','anot_roman']
+
+    # Filter out rows which contain numbers, symbols and formatting etc.
+    df = df[df.anot_roman.str.isalpha() == True]
+
     return df

@@ -9,6 +9,6 @@ Output: "Why did the lawyer start learning a new language? Because LEGAL advice 
 Input: "law", "lau" (flame)
 Output: "Why did the fire go to school? To learn about LAU and order"
 Input: "tail", "tel" (Oil)
-Output: "Why did the oil go to the party? To TAIL everyone how slippery it can be"
+Output: "Why did the oil go to the party? To TEL everyone how slippery it can be"
 Input: "male", "mel" (Match)
 Output: "Why did the man go to the fruit market? To find a perfect MEL"

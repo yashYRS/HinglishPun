@@ -12,15 +12,20 @@ from deep_translator import GoogleTranslator
 
 
 
-script_vowel_file = 'data/transliterate/svar.csv'
-script_consonant_file = 'data/transliterate/vyanjan.csv'
+script_vowel_file = Path('data') / 'transliterate' / 'svar.csv'
+script_consonant_file = Path('data')/ 'transliterate' / 'vyanjan.csv'
 
 
 class HomophoneGenerator:
 
     def __init__(self, load_df_file: Union[bool, Path]=False,
                  save_df_file: Union[bool, Path]=False, ipa_sim_thresh: int=75) -> None:
-
+        """
+        Args:
+            load_df_file (Union[bool, Path], optional): Path to Homophone df (if already available). Defaults to False.
+            save_df_file (Union[bool, Path], optional): Path where the Homophone df needs to be stored. Defaults to False.
+            ipa_sim_thresh (int, optional): Minimum Similarity between IPAs to be considered homophonic. Defaults to 75.
+        """
         if isinstance(load_df_file, Path):
             # If homophones have already been generated, load the file, instead of generating everything from scratch
             self.homophone_df: pd.DataFrame = pd.read_csv(load_df_file)
@@ -53,6 +58,10 @@ class HomophoneGenerator:
             self.homophone_df: pd.DataFrame
     
     def get_homophones_df(self) -> None:
+        """From the corpus of Common English and Hindi words, find words that are homophones of each
+        other, by converting each word into their IPAs, and finding the words with Minimum Edit Distance
+        between their IPAS. Finally transliterate the Hindi words to the latin script
+        """        
         # Retrieve object variables to avoid constant access costs
         thresh, translator = self.ipa_sim_thresh, self.translator
         epi_hi, epi_en = self.epi_hi, self.epi_en
@@ -80,10 +89,20 @@ class HomophoneGenerator:
 
 
     def save_homophone_df(self) -> None:
+        """Save the homophone dataframe to the file path given while initialising class
+        """        
         # Save the homopohne datafrae to the csv file
         self.homophone_df.to_csv(self.save_df_file)
 
     def devng_to_latin_word(self, devng_word: str) -> str:
+        """Transliterate given hindi word written in devanagri script to roman/latin script
+
+        Args:
+            devng_word (str): Hindi Word in Devanagari script
+
+        Returns:
+            str: Hindi Word in Latin Script
+        """        
         # Retrieve object variables to avoid constant access costs
         consonants_hi, vowels_hi = self.consonants_hi, self.vowels_hi
         consonants_dict, vowels_dict = self.consonants_dict, self.vowels_dict
@@ -114,8 +133,30 @@ class HomophoneGenerator:
                     # As the special case of 'a' doesn't apply
                     latin_word += consonants_dict[curr_char]
         return latin_word
+    
+    def evaluate_transliteration(self, dataset_path: Path) -> float:
+        """Evaluate the transliteration module on the input dataset path
+
+        Args:
+            dataset_path (Path): Path to the ground truth annotations
+
+        Returns:
+            float: Accuracy Percentage
+        """        
+        # Read the file with the ground truth annotations
+        ground_truth_df = utils.read_and_clean_tsv(dataset_path=dataset_path)
+        # Perform transliteration on all the words from the dataset
+        ground_truth_df['pred_roman'] = ground_truth_df.hi.apply(self.devng_to_latin_word)
+        # Check predictions against the actual annotations
+        correct_preds = ground_truth_df[ground_truth_df.pred_roman.str.strip() == ground_truth_df.anot_roman.str.strip()].shape[0]
+        # Return the percentage of correct predictions made
+        return (correct_preds*100) / ground_truth_df.shape[0]
 
     def get_sentences_per_en(self) -> None:
+        """Per English word in our dataframe, find sentences from the corpus,
+        where the english word lies towards the end of the sentence, and store it back
+        to the dataframe
+        """
         # Get the list of english words that have homophones
         en_words = self.homophone_df['en'].tolist()
 

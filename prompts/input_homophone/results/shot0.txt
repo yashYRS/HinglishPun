@@ -1,7 +1,5 @@
 Input: "gained", "gend" (ball)
 I gained a lot of weight playing gend, now I'm a rounder player!
-Input: "two", "tum" (You)
-Why did the "two" and "tum" break up? Because they couldn't count on each other!
 Input: "tail", "tel" (Oil)
 Why did the cat put oil in its hair? Because it wanted a sleek and tel look!
 Input: "male", "mel" (Match)
