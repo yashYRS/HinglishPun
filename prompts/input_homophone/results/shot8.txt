@@ -1,0 +1,14 @@
+Input: "cheat", "uchit" (right)
+Output: "Teacher to student: Why did you CHEAT in the exam? Student: Sir, mujhe laga copying UCHIT hai"
+Input: "law", "lau" (fire)
+Output: "Why did the fire go to school? Because it wanted to become a LAW-yer"
+Input: "equal", "nikal" (leave)
+Output: "Why did the math book look sad? Because it couldn't find anyone to be its EQUAL, sab log NIKAL gaye"
+Input: "achieve", "sachiv" (righteous)
+Output: "Why did the politician win the award? Because he was the best SACHIV to ACHIEVE his goals."
+Input: "eagle", "nigal" (swallow)
+Output: "Why did the bird go to the therapist? Because it had trouble with its EAGLE and kept NIGALing."
+Input: "origin", "vajan" (weight)
+Output: "When the doctor asked about the ORIGIN of my health issues, I replied 'Vajan kam karne ki koshish kar raha hoon'"
+Input: "age", "tej" (fast)
+Output: "Why did the number want to know its AGE? Because it wanted to be as TEJ as possible!"

@@ -1,0 +1,16 @@
+Input: "key", "kee" (Many)
+Output: "Why did the lock feel overwhelmed? It had too many KEYs to handle!"
+Input: "tail", "tel" (Oil)
+Output: "Why did the dog wag its TAIL? Because it was full of TEL"
+Input: "law", "lau" (flame)
+Output: "Why did the lawyer bring a matchstick to court? To LAU down the law"
+Input: "legal", "ling" (gender)
+Output: "Why did the lawyer break up with the grammarian? Because he couldn't handle her LEGAL LINGo"
+Input: "beach", "bich" (between)
+Output: "Why did the sand feel lonely? Because it was stuck in the BEACH bich"
+Input: "chip", "chup" (Silent)
+Output: "Why did the potato go to school? To become a CHIP"
+Input: "male", "mel" (Match)
+Output: "Why did the man go to the fruit market? He wanted to find a perfect MEL"
+Input: "gained", "gend" (ball)
+Output: "Why did the cricket player feel happy after scoring runs? He GAINED a lot of GEND"

@@ -1,0 +1,59 @@
+Generate a Code mixed Hindi English Pun based on the homophones provided as input. 
+Some example input output pairs are provided as reference.
+"""
+Example 1:
+Input: "Submit", "Sab Mit" (everything gets erased)
+Output: "Exam ki answer sheet return karte hi SUBMIT jata hai"
+
+Example 2:
+Input: "Casio" (Electronics brand), "Kaisi ho" (How are you)
+Output: "What did one calculator said to another? CASIO"
+
+Example 3:
+Input: "We wake", "Vivek" (Hindi Name)
+Output: "Vivek: What do we do first thing in the morning? Me: VIVEK up"
+
+Example 4:
+Input: "Soccer", "Shukkar" (grateful)
+Output: "Allah ka SOCCER hai ki mera school football team me selection ho gaya."
+
+Example 7:
+Input: "Bunny", "Bani" (make)
+Output: "He tried to adopt a rabbit, par baat nhi bani"
+
+Example 8:
+Input: "Siri", "Sir hi" (head only)
+Output: "I will hit you with you with the Iphone and tera SIRI foot jayega"
+
+Example 9:
+Input: "Parle" (Biscuit brand), "Parh le" (go study)
+Output: "Friend: Can I eat a biscuit ? Me: Tu PARLE"
+
+Example 10:
+Input: "Soccer", "So kar" (after sleeping)
+Output: "I can't play football in the morning, raat ko late SOCCER, subah nahi utha jaata."
+
+Example 11:
+Input: "Bath", "Baat" (matter)
+Output: "Main aaj nahaya nahi, Koi BATH nahi"
+
+Example 12:
+Input: "Joker", "Jo kar" (what I want to do)
+Output: "ab kya karoge. Batman: JOKER na tha, vo kar liya"
+
+Example 13:
+Input: "Circle", "Sir kal" (Sir tomorrow)
+Output: "Teacher: Chalo sab Geometry ki book kholo. Student: Aaj nahi CIRCLE."
+
+Example 14:
+Input: "Sunday", "Sone de" (let me sleep)
+Output: "Who called it Sunday and not Sone de?"
+
+Example 15:
+Input: "Nagasaki", "Na gaa saki" (Couldn't sing)
+Output: "Hiroshima went for a singing competition, but Hiroshima Nagasaki."
+
+Example 16:
+Input: "I will see", "Aalsi" (lazy)
+Output: "I am feeling too lazy to meet my friends, AALSI them later."
+"""

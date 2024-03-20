@@ -4,7 +4,7 @@ Steps
 2. If "HI_TO_EN" and "EN" are the same, redo step 1, else proceed to step 3.
 3. Make short sentences (less than 10 words), with "EN" as the object of the sentence.
 4. Replace "EN" with the "HI"
-5. Replace the Noun at the start of the sentence with words that are highly related to the "HI_TO_EN" word.
+5. Replace the Noun Phrase at the start of the sentence with a contextualised phrase that is highly related to the "HI_TO_EN" word.
 
 An example is given below
 """
@@ -81,42 +81,4 @@ Example 4:
 
     Step 5:
     Output: "The fishes had a lovely waterमिलन (watermelon)"
-"""
-"""
-Example 5:
-    Step 1:
-    EN: "ash"
-    HI: "ऐश" (pronounced as "aish")
-    HI_TO_EN: "chill"
-
-    Step 2: 
-    "chill" and "ash" are not the same, proceed to Step 3
-
-    Step 3:
-    Short sentence with "EN" as the object: "The janitor brushed away the ash"
-
-    Step 4:
-    Replace EN with HI: "The janitor brushed away the ऐश (ash)"
-
-    Step 5:
-    Output: "The loss brushed away the ऐश (ash)"
-"""
-"""
-Example 6:
-    Step 1:
-    EN: "saw"
-    HI: "सौ" (pronounced as "saw")
-    HI_TO_EN: "hundred"
-
-    Step 2: 
-    "saw" and "hundred" are not the same, proceed to Step 3
-
-    Step 3:
-    Short sentence with "EN" as the object: "The carpenters had a saw machine"
-
-    Step 4:
-    Replace EN with HI: "The carpenters had a सौ (saw) machine"
-
-    Step 5:
-    Output: "The crickters had a सौ (saw) machine"
 """

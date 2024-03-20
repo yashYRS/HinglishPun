@@ -7,7 +7,6 @@ from nltk.corpus import brown
 from collections import defaultdict
 
 
-# nltk.download('averaged_perceptron_tagger')
 words_file_hi = 'data/words/hindi_common.csv'
 words_file_en = 'data/words/english_common.txt'
 
@@ -46,7 +45,13 @@ def retrieve_common_words() -> tuple[list, list]:
 def get_homophone_en_hi(word_en: list, ipas_hi: dict, epi_en, thresh: int=75):
     ipa_en = epi_en.transliterate(word_en)
     # Apply fuzzy matching to get relatively similar ipas
-    words_hi = [word_hi for word_hi, ipa_hi in ipas_hi.items() if fuzz.ratio(ipa_en, ipa_hi) > thresh]
+    words_hi = [(word_hi, fuzz.ratio(ipa_en, ipa_hi)) for word_hi, ipa_hi in ipas_hi.items()]
+    # Filter out words that don't match phonetically
+    words_hi = [(w, score) for w, score in words_hi if score > thresh]
+    # Sort words based on the matching score
+    words_hi = sorted(words_hi, key=lambda x: x[1], reverse=True)
+    # Remove the scores from the list and just keep the hi word
+    words_hi = [w for w, _ in words_hi]
     return (word_en, words_hi)
 
 
@@ -69,6 +74,33 @@ def filter_corpus_sentences(en_words: list) -> dict:
                 en_candidates[en_word].append(curr_sent)
     return en_candidates
 
+def get_homophone_pairs(df: pd.DataFrame, len_thresh: int=3):
+    # Convert homophone pairs to a list of string inputs
+    # Filter out as many candidates as possible to minimise LLM costs
+    column_list = ['en', 'latin_hi', 'translated_hi_en']
+    df = df[column_list]
+    
+    string_list = []
+    for _, row in df.iterrows():
+        en_word, hi_list, translated_list = row.en, row.latin_hi, row.translated_hi_en
+        added_homophone = False
+        for hi_word, hi_translated in zip(hi_list, translated_list):
+            if len(hi_word) < len_thresh or added_homophone is True:
+                # If the hi word is too short remove or if a homophonic pair has already been added
+                # for the given english word then move on to a different english word
+                continue
+            if fuzz.ratio(hi_translated.lower(), hi_word) > 50:
+                # The hi word is most probably a borrowed word, hence skip
+                continue
+            # The transliterated word is of similar length to the english word & the homophonic word
+            # doesn't mean the same thing it does in English
+            if abs(len(en_word) - len(hi_word)) < len_thresh and fuzz.ratio(hi_translated.lower(), en_word) < 85:
+                added_homophone = True
+                # Create the string that will be appended to the prompts
+                string_list.append('Input: "{}", "{}" ({})'.format(en_word, hi_word, hi_translated))
+    return string_list
+
+
 
 def post_process_llm_response(text):
     if 'Output:' in text:
@@ -76,3 +108,13 @@ def post_process_llm_response(text):
         pun_start = text.index('Output:')
         return text[pun_start:]
     return text
+
+
+def read_and_clean_tsv(dataset_path):
+    df = pd.read_csv(dataset_path, sep = '\t')
+    # Push the column to be a row, since the dataset directly starts with
+    # transliteration pairs, so push current column names to a row, and add new column names
+    df.loc[-1] = df.columns
+    df = df.sort_index().reset_index(drop=True)
+    df.columns = ['hi','anot_roman']
+    return df
