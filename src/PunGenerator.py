@@ -1,7 +1,7 @@
 import os
-import tqdm
 import ast
-import json
+import tqdm
+
 import random
 from pathlib import Path
 
