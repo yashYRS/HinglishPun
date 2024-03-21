@@ -8,10 +8,6 @@ from nltk.corpus import brown
 from collections import defaultdict
 
 
-words_file_hi = 'data/words/hindi_common.csv'
-words_file_en = 'data/words/english_common.txt'
-
-
 def is_noun(input_word: str):
     tagged_word = nltk.pos_tag([input_word])
     # Check if the tag of the word starts with 'N' (indicating it's a noun)
@@ -29,9 +25,13 @@ def write_file(data, file_path: Path):
         f.write(data)
 
 
-def retrieve_common_words() -> tuple[list, list]:
+def retrieve_common_words(words_file_en: Path, words_file_hi: Path) -> tuple[list, list]:
     """From the common Hindi & English corpuses read the common words
     clean formatting, wherever necessary and return the corresponding lists
+
+    Args:
+        words_file_en (pathlib.Path): Path to the corpus containing English words in different lines (csv file)
+        words_file_hi (pathlib.Path): Path to the corpus containing hindi words in different lines (txt file)
 
     Returns:
         tuple[list, list]: List of Common English words, List of Common Hindi words

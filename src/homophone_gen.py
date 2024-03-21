@@ -11,14 +11,9 @@ from pathlib import Path
 from deep_translator import GoogleTranslator
 
 
-
-script_vowel_file = Path('data') / 'transliterate' / 'svar.csv'
-script_consonant_file = Path('data')/ 'transliterate' / 'vyanjan.csv'
-
-
 class HomophoneGenerator:
 
-    def __init__(self, load_df_file: Union[bool, Path]=False,
+    def __init__(self, data_folder: Path, load_df_file: Union[bool, Path]=False,
                  save_df_file: Union[bool, Path]=False, ipa_sim_thresh: int=75) -> None:
         """
         Args:
@@ -26,13 +21,21 @@ class HomophoneGenerator:
             save_df_file (Union[bool, Path], optional): Path where the Homophone df needs to be stored. Defaults to False.
             ipa_sim_thresh (int, optional): Minimum Similarity between IPAs to be considered homophonic. Defaults to 75.
         """
+        # Path to the common English and Hindi words
+        words_file_hi = data_folder / 'words' / 'hindi_common.csv'
+        words_file_en = data_folder / 'words' / 'english_common.txt'
+
+        # Path to the transliterated character files
+        script_vowel_file = data_folder / 'transliterate' / 'svar.csv'
+        script_consonant_file = data_folder / 'transliterate' / 'vyanjan.csv'
+
         if isinstance(load_df_file, Path):
             # If homophones have already been generated, load the file, instead of generating everything from scratch
             self.homophone_df: pd.DataFrame = pd.read_csv(load_df_file)
 
         else:            
             # Get list of common hindi and english words from a corpus
-            words_en, words_hi = utils.retrieve_common_words()
+            words_en, words_hi = utils.retrieve_common_words(words_file_en, words_file_hi)
             self.words_en: list = words_en
             self.words_hi: list = words_hi
 
@@ -134,7 +137,7 @@ class HomophoneGenerator:
                     latin_word += consonants_dict[curr_char]
         return latin_word
     
-    def evaluate_transliteration(self, dataset_path: Path) -> float:
+    def evaluate_transliteration(self, dataset_path: Path, save_file: Union[bool, Path]=False) -> float:
         """Evaluate the transliteration module on the input dataset path
 
         Args:
@@ -149,6 +152,9 @@ class HomophoneGenerator:
         ground_truth_df['pred_roman'] = ground_truth_df.hi.apply(self.devng_to_latin_word)
         # Check predictions against the actual annotations
         correct_preds = ground_truth_df[ground_truth_df.pred_roman.str.strip() == ground_truth_df.anot_roman.str.strip()].shape[0]
+        if isinstance(save_file, bool) is False:
+            ground_truth_df.to_csv(save_file)
+
         # Return the percentage of correct predictions made
         return (correct_preds*100) / ground_truth_df.shape[0]
 

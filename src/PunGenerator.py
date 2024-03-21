@@ -18,10 +18,12 @@ from src.homophone_gen import HomophoneGenerator
 
 class PunGenerator:
 
-    def __init__(self, homophone_df_path: Path, load_homophone: bool=False, method: str='homophone',
+    def __init__(self, data_folder: Path, homophone_df_path: Path, load_homophone: bool=False, method: str='homophone',
                  llm_model_name: str="gpt-3.5-turbo", llm_temperature: float=0.3):
         """
         Args:
+            data_folder (Path): Path to the folder containing resources like the transliterated character files, common
+                English words, hindi words etc.
             homophone_df_path (Path): Path to the file where the homophone df is either stored or will be stored
             load_homophone (bool, optional): If False, homophones are generated from scratch. Defaults to False.
             method (str, optional): Possible types are `prompting`, `homophone`, `homophone_prompt`. 
@@ -41,22 +43,24 @@ class PunGenerator:
             self.embedding_model = api.load("glove-twitter-25")
             # Store the entire vocabulary found in the embedding model to allow faster membership inference
             self.embedding_vocab : set = set(self.embedding_model.index_to_key)
-            self.setup_homophone_df(load_homophone, homophone_df_path, generate_sentence=True)
+            self.setup_homophone_df(data_folder, load_homophone, homophone_df_path, generate_sentence=True)
 
         elif method == 'prompt':
             self.setup_llm_client(llm_model_name, llm_temperature)
         
         elif method == 'homophone_prompt':
-            self.setup_homophone_df(load_homophone, homophone_df_path)
+            self.setup_homophone_df(data_folder, load_homophone, homophone_df_path)
             self.setup_llm_client(llm_model_name, llm_temperature)
 
         self.method: str = method 
         self.pun_list: list = []
     
-    def setup_homophone_df(self, load_homophone: bool, homophone_df_path: Path, generate_sentence: bool=False):
+    def setup_homophone_df(self, data_folder: Path, load_homophone: bool, homophone_df_path: Path, generate_sentence: bool=False):
         """Either load the homophone dataframe or create it from scratch by comparing IPAs of English and Hindi words
 
         Args:
+            data_folder (Path): Path to the folder containing resources like the transliterated character files, common
+                English words, hindi words etc.
             load_homophone (bool): If False, homophones are generated from scratch
             homophone_df_path (Path): Path to the file where the homophone df is either stored or will be stored
             generate_sentence (bool, optional):If True, then candidate sentences per English word in our dataframe 
@@ -64,7 +68,7 @@ class PunGenerator:
         """        
         if load_homophone is True:
             # If homophones have already been generated, load the file 
-            self.homophone_gen = HomophoneGenerator(load_df_file=homophone_df_path)
+            self.homophone_gen = HomophoneGenerator(data_folder=data_folder, load_df_file=homophone_df_path)
             homophone_df = self.homophone_gen.homophone_df
 
             # Since we are loading the dataframe from a csv, interpret string representation of lists as lists
@@ -76,13 +80,13 @@ class PunGenerator:
             homophone_df['translated_hi_en'] = homophone_df['translated_hi_en'].apply(ast.literal_eval)
         else:
             # Create the homophone df from scratch
-            self.homophone_gen = HomophoneGenerator(save_df_file=homophone_df_path)
+            self.homophone_gen = HomophoneGenerator(data_folder=data_folder, save_df_file=homophone_df_path)
             self.homophone_gen.get_homophones_df()
             # Gather candidate sentences per english word
             if generate_sentence is True:
                 self.homophone_gen.get_sentences_per_en()
             # Save the homophone df to reuse in subsequent runs
-            self.homophone_gen.save_homophone_df()        
+            self.homophone_gen.save_homophone_df()
 
     def setup_llm_client(self, llm_model_name: str, llm_temperature: float):
         """Initialise the Open AI model by reading the api key
