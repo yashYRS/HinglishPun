@@ -60,7 +60,7 @@ This section details the various command-line arguments you can use to customize
 **Optional Arguments:**
 
 * `-method (str, default='homophone_prompt')`: Selects the method for prompting the large language model (LLM). Choose from:
-    * `homophone_prompt`: Uses homophone-based prompting (default). - Best Results
+    * `homophone_prompt`: Uses homophone-based prompting (default) based on the prompts in `prompts/input_homophone` folder - Best Results
     * `prompt` : Uses a wide array of prompts found in the `prompts/algorithmic' folder
     * `homophone` : Generate homophones and try and generate puns by modifying the brown corpus English sentences
 

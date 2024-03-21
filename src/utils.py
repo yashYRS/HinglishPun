@@ -170,7 +170,7 @@ def post_process_llm_response(text):
     if 'Output:' in text:
         pun_start = text.index('Output:')
         return text[pun_start:]
-    return text
+    return ''
 
 
 def read_and_clean_tsv(dataset_path):
