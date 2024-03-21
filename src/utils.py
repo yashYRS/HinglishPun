@@ -1,10 +1,14 @@
 import tqdm
 import nltk
+import json
 import epitran
 import pandas as pd
+
 from thefuzz import fuzz
 from pathlib import Path
+
 from nltk.corpus import brown
+import matplotlib.pyplot as plt
 from collections import defaultdict
 
 
@@ -194,3 +198,130 @@ def read_and_clean_tsv(dataset_path):
     df = df[df.anot_roman.str.isalpha() == True]
 
     return df
+
+def bar_chart(title: str, scores_dict: dict, file_path: Path):
+    """
+    Args:
+        title (str): title of the box plot
+        scores_dict (dict): Maps labels to a list of scores
+        file_path (Path): Path where the plot image will be saved
+    """
+    # Get the labels, and the values from the dictionary
+    categories, values = list(scores_dict.keys()), list(scores_dict.values())
+    values = [round(v, 2) for v in values]
+    # Plotting the bar chart
+    plt.figure(figsize=(8, 6))
+    plt.bar(categories, values, color='skyblue')
+
+    # Adding the data values on top of each bar
+    for i in range(len(categories)):
+        plt.text(i, values[i], str(values[i]), ha='center', va='bottom')
+
+    # Adding labels and title
+    plt.xlabel('Categories')
+    plt.ylabel('Mean Ratings')
+    plt.title(title)
+
+    # Displaying the plot
+    plt.savefig(file_path)
+
+
+def box_plot(title: str, scores_dict: dict, file_path: Path, remove_human: bool=False):
+    """
+    Args:
+        title (str): title of the box plot
+        scores_dict (dict): Maps labels to a list of scores
+        file_path (Path): Path where the plot image will be saved
+        remove_human (bool, optional): if True, human category removed before plotting. Defaults to False.
+    """
+    # Remove human scores, if normalised data is being plotted
+    if remove_human is True:
+        scores_dict.pop('Human', None)
+    # Get the labels, and the values from the dictionary
+    categories, values = list(scores_dict.keys()), list(scores_dict.values())
+    
+    # Create boxplot
+    plt.figure(figsize=(10, 6))
+    plt.boxplot(values, labels=categories)
+
+    # Add title and labels
+    plt.title(title)
+    plt.xlabel('Category')
+    plt.ylabel('Score')
+
+    plt.grid(True)
+    plt.savefig(file_path)
+
+
+def plot_survey_results(survey_folder: Path, min_human_score: float=3):
+    """Visualise some of the results collected during the survey after removing
+    users who gave low scores across all human generated jokes 
+
+    Args:
+        survey_folder (Path): Path where data to be plotted is stored
+        min_human_score (float, optional): Minimum mean score expected by participants. Defaults to 3.
+    """    
+    survey_map_file = survey_folder / 'survey_map.json'
+    survey_file = survey_folder / 'survey_results.csv'
+    
+    with open(survey_map_file) as f:
+        pun_key = json.load(f)
+
+    # Drop Timestamp column as its not needed
+    pun_ratings_df = pd.read_csv(survey_file)
+    pun_ratings_df = pun_ratings_df.drop('Timestamp', axis=1)
+    pun_ratings_df.columns = [c.replace('\"', '') for c in pun_ratings_df.columns]
+    
+    human_ratings = pun_ratings_df[pun_key['Human']]
+    # Get a mapping from the participant index to the average ratings they gave to the human generated jokes
+    humans_mean = human_ratings.T.mean(skipna=True).to_dict()
+
+    # Remove the indices of participants which gave extremely low scores to human scores
+    valid_rating_dict = {k: value for k, value in humans_mean.items() if value > min_human_score}
+    print("Number of valid participants - {}".format(len(valid_rating_dict)))
+
+    category_scores = defaultdict(list)
+    category_norm_scores = defaultdict(list)
+
+    for idx, row in pun_ratings_df.iterrows():
+        # filter out participants who gave extremely low scores to human generated puns
+        if idx not in valid_rating_dict:
+            continue
+
+        # Normalising factor (based on ratings given to human puns) for the participant
+        normalise_factor = valid_rating_dict[idx]
+
+        for category, pun_list in pun_key.items():
+            # Get the mean ratings given to that category by the participant
+            mean_score = row[pun_list].mean(skipna=True)
+            # Store the scores received per category
+            category_scores[category].append(mean_score)
+            # Normalise the participant score, based on human ratings given
+            normalised_score = (mean_score * normalise_factor)/5
+            # Cap rating to be max 5
+            category_norm_scores[category].append(min(normalised_score, 5))
+    
+    temp_file_path = survey_folder / 'raw_ratings_box.png'
+    box_plot(title='Raw Pun Ratings', scores_dict=category_scores,
+             file_path=temp_file_path, remove_human=False)
+
+    temp_file_path = survey_folder / 'norm_ratings_box.png'
+    box_plot(title='Normalised Pun Ratings Per Category', scores_dict=category_norm_scores,
+             file_path=temp_file_path, remove_human=True)
+
+    # Mean scores per category and plot bar chart - works
+    temp_file_path = survey_folder / 'mean_ratings.png'
+    mean_scores = {category: sum(scores)/ len(scores) for category, scores in category_scores.items()}
+    bar_chart(title='Mean Ratings per Category', scores_dict=mean_scores, file_path=temp_file_path)
+
+    # Get Max and Min scores per category and plot bar chats on means of them
+    sorted_scores = {category: sorted(scores, reverse=True) for category, scores in category_scores.items()}
+    min_mean_scores = {category: sum(scores[-2:])/2 for category, scores in sorted_scores.items()}
+    max_mean_scores = {category: sum(scores[:2])/2 for category, scores in sorted_scores.items()}
+
+    temp_file_path = survey_folder / 'max_2_mean_ratings.png'
+    bar_chart(title='Mean of the Top 2 Scores per Category', scores_dict=max_mean_scores,
+                   file_path=temp_file_path)
+    temp_file_path = survey_folder / 'min_2_mean_ratings.png'    
+    bar_chart(title='Mean of the Top 2 Scores per Category', scores_dict=min_mean_scores,
+                   file_path=temp_file_path)    

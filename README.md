@@ -73,18 +73,29 @@ This section details the various command-line arguments you can use to customize
 * `-eval_transliterate (bool)`: If set to `True`, evaluates the transliteration method on the specified dataset (default: `False`).
 * `-save_trans_file (str, default='trans_eval.csv')`: Specifies the file name for saving transliteration evaluation results (if `-eval_transliterate` is enabled). Defaults to `trans_eval.csv`.
 * `-trans_file_name (str, default='aligned_dataset.tsv')`: Sets the name of the dataset corpus file (in TSV format) for transliteration evaluation. Currently configured for Google Research's Dakshina corpus.
+* `-plot_survey (bool)`: If set to `True`, create plots of all the results collected in the survey stored in `data/survey` folder
 
 **Example Usage: Generating Puns**
 
 ```sh
 python main.py -method homophone_prompt
 ```
+The puns generated in case of prompting are stored in the `prompts/../results` folder
+Additionaly they also get printed to the terminal
 
-Thi**Example Usage: Evaluating Transliteration**
+**Example Usage: Evaluating Transliteration**
 
 ```sh
 python main.py -eval_transliterate -save_trans_file 'path_to_results'
 ```
+The evalaution accuracy is printed to the terminal, and the transliteration results are saved to the given file
+
+**Example Usage: Generating Graphs
+
+```sh
+python main.py -plot_survey
+```
+The resulting graph images get stored in the `data/survey` folder
 
 <!-- LICENSE -->
 ## License
