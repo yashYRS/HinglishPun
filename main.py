@@ -8,6 +8,7 @@ from src.utils import plot_survey_results
 parser = argparse.ArgumentParser(description='')
 
 parser.add_argument('-data_folder', type=str, default='data', help='Path to the Data folder')
+parser.add_argument('-refine_folder', type=str, default='SelfRefine', help='Name of the folder where SelfRefine criteria is stored')
 parser.add_argument('-prompt_folder', type=str, default='prompts', help='Name of the folder where prompts are stored')
 parser.add_argument('-method', type=str, default='homophone_prompt', help='Method to be chosen for prompting')
 
@@ -61,11 +62,14 @@ else:
     # Get puns using the method suggested, if logging = True, prints puns to the terminal
     # Else it gets saved to the prompts/../results folders
 
+    self_refine_folder = None
     if pun_method == 'homophone_prompt':
         prompt_folder = Path(args.prompt_folder) / 'input_homophone'
+        if args.refine_folder is not None:
+            self_refine_folder = Path(args.prompt_folder) / args.refine_folder
     elif pun_method == 'prompt':
         prompt_folder = Path(args.prompt_folder) / 'algorithmic'
     else:
         prompt_folder = Path(args.prompt_folder)
 
-    pun_list = pun_gen_obj.get_puns(prompt_folder, args.log_puns)
+    pun_list = pun_gen_obj.get_puns(self_refine=self_refine_folder, prompt_folder=prompt_folder, log_puns=args.log_puns)

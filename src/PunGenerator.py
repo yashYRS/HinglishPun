@@ -16,14 +16,33 @@ from gensim import downloader as api
 
 from src import utils
 from src.homophone_gen import HomophoneGenerator
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
 
 logging.getLogger().setLevel(logging.INFO)
+
+class OpenSourceLLMClient:
+    def __init__(self, model_name, temperature=0.7):
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.model = AutoModelForCausalLM.from_pretrained(model_name)
+        self.temperature = temperature
+
+    def generate_response(self, message_prompt):
+        inputs = self.tokenizer(message_prompt, return_tensors="pt")
+        outputs = self.model.generate(
+            **inputs,
+            do_sample=True,
+            temperature=self.temperature,
+            max_length=400
+        )
+        response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+        return response
 
 
 class PunGenerator:
 
     def __init__(self, data_folder: Path, homophone_df_path: Path, load_homophone: bool=False, method: str='homophone',
-                 llm_model_name: str="gpt-3.5-turbo", llm_temperature: float=0.3, limit_calls: int=1):
+                 llm_model_name: str="gpt-3.5-turbo", llm_temperature: float=0.3, limit_calls: int=1, refine_iterations: int=3):
         """
         Args:
             data_folder (Path): Path to the folder containing resources like the transliterated character files, common
@@ -37,7 +56,8 @@ class PunGenerator:
                 puns by exploiting them. Defaults to 'homophone'.
             llm_model_name (str, optional): The Open AI model of choice. Defaults to "gpt-3.5-turbo".
             llm_temperature (float, optional): Lower temperature results in more predictable responses. Defaults to 0.3.
-            limit_calls (int, optional): Number of homophones to pass per Prompt type. Defaults to 1            
+            limit_calls (int, optional): Number of homophones to pass per Prompt type. Defaults to 1
+            refine_iterations (int, optional): Number of tries for SelfRefine framework.            
         """
         if method == 'homophone':
             # The number of possible replacements that will be used to replace the existing noun phrase
@@ -58,6 +78,8 @@ class PunGenerator:
             self.setup_homophone_df(data_folder, load_homophone, homophone_df_path)
             self.setup_llm_client(llm_model_name, llm_temperature)
 
+        self.open_source = False
+        self.refine_iterations: int = 3
         self.method: str = method 
         self.pun_list: list = []
     
@@ -106,10 +128,18 @@ class PunGenerator:
 
         # Path to the .env file in the base folder
         load_dotenv(Path().absolute() / '.env')
-        api_key_value = os.getenv("OPENAPI_KEY")
-
-        # Initialise the OPEN AI model
-        self.llm_client = OpenAI(api_key=api_key_value)
+        if 'gpt' in llm_model_name: 
+            api_key_value = os.getenv("OPENAPI_KEY")
+            # Initialise the OPEN AI model
+            self.llm_client = OpenAI(api_key=api_key_value)
+        elif 'llama' in llm_model_name.lower():
+            api_key_value = os.getenv("LLAMA_KEY")
+            os.environ["HF_ACCESS_TOKEN"] = api_key_value
+            self.llm_client = OpenSourceLLMClient(llm_model_name, llm_temperature)
+            self.open_source = True
+        else:
+            logging.info("LLM model not supported")
+            exit(0)
 
     def replace_noun_for_pun(self, input_sentence: list, pos_sequence: list, word_context_change: str, log_puns: bool=True):
         """Replace the first noun phrase of the sentence with a corresponding noun phrase that is more
@@ -196,19 +226,23 @@ class PunGenerator:
         """        
         # Call the LLM Api to get the required response
         # Temperature is high, since we want more deterministic outputs
-        response = self.llm_client.chat.completions.create(
-            messages=[
-                    {
-                        "role": "user",
-                        "content": message_prompt
-                    }
-            ],
-            model=self.llm_model_name,
-            temperature=self.llm_temperature,
-            n=1,
-        )
-        # Retrieve the prompt result from the LLM
-        response = response.choices[0].message.content.strip()
+        if self.open_source is False:
+            response = self.llm_client.chat.completions.create(
+                messages=[
+                        {
+                            "role": "user",
+                            "content": message_prompt
+                        }
+                ],
+                model=self.llm_model_name,
+                temperature=self.llm_temperature,
+                n=1,
+            )
+            # Retrieve the prompt result from the LLM
+            response = response.choices[0].message.content.strip()
+        else: 
+            # Open source LLM client uses transformer generate method
+            self.llm_client.generate_response(message_prompt)
         return response
 
     def prompting_llm_algorithmic(self, prompt_folder: Path=None, log_puns: bool=True):
@@ -218,7 +252,6 @@ class PunGenerator:
             prompt_folder (Path, optional): Path where the prompts are stored. Defaults to None.
             log_puns (bool, optional): If True Print the generated puns to the terminal. Defaults to True 
         """        
-        # Zero shot / One shot / Few shot
         for prompt_type_dir in prompt_folder.iterdir():
             prompt_instruct_folder = prompt_type_dir / 'input'
             prompt_result_folder = prompt_type_dir / 'results'
@@ -244,16 +277,24 @@ class PunGenerator:
                 # Write the raw response received from the LLM to the result files
                 utils.write_file(response, result_file)
 
-    def prompting_llm_homophone(self, prompt_folder: Path=None, log_puns: bool=True):
+    def prompting_llm_homophone(self, self_refine: Path=None, prompt_folder: Path=None, log_puns: bool=True):
         """Prompt LLMs by providing them Homophone pairs as input along with some examples of 
         the kind of puns / one liners we are looking for, given such a homophonic pair
 
         Args:
+            self_refine (Path, optional): Path to where the Self refine paths are stored.  
             prompt_folder (Path, optional): Path where the prompts are stored. Defaults to None.
             log_puns (bool, optional): If True Print the generated puns to the terminal. Defaults to True            
         """
         prompt_instruct_folder = prompt_folder / 'input'
-        prompt_result_folder = prompt_folder / 'results'
+        
+        # Zero shot / One shot / Few shot
+        if self_refine is not None:
+            refine_zero_shot = utils.read_file(self_refine / 'zero_shot.txt')
+            refine_few_shot = utils.read_file(self_refine / 'few_shot.txt')
+            prompt_result_folder = prompt_folder / 'refine_results'
+        else: 
+            prompt_result_folder = prompt_folder / 'results'
 
         homophone_df = self.homophone_gen.homophone_df
         # From the dataframe format, get homphones as strings that can be used directly as inputs in our prompts
@@ -272,8 +313,13 @@ class PunGenerator:
                 input_prompt = message_prompt + '\n' + homophone_inp
                 
                 # Call the LLM model
-                response = self.execute_llm_call(input_prompt)
-                # # Remove the extra details and just keep the pun
+                if self_refine is None:
+                    response = self.execute_llm_call(input_prompt)
+                elif '0' in input_file.stem:
+                    response = self.self_refine(prompt=input_prompt, criteria=refine_zero_shot)
+                else: 
+                    response = self.self_refine(prompt=input_prompt, criteria=refine_few_shot)
+                # Remove the extra details and just keep the pun
                 required_pun = utils.post_process_llm_response(response)
                 # # Add the generated pun to the list of puns generated by the system
                 self.pun_list.append(required_pun)
@@ -291,10 +337,12 @@ class PunGenerator:
                 # Write the raw response received from the LLM to the result files
                 utils.write_file(response, result_file)
     
-    def get_puns(self, prompt_folder: Path=None, log_puns: bool=True) -> list:
+    def get_puns(self, self_refine: Path=None, prompt_folder: Path=None, log_puns: bool=True) -> list:
         """Wrapper function to provide a unified API for generating puns from this package
 
         Args:
+            self_refine (Path, optional): Path to where the Self Refine path is stored.
+                If none, don't use self refine. Defaults to None.
             prompt_folder (Path, optional): Path to where the prompts are stored. Defaults to None.
                 Doesn't need to be passed in case method doesn't involve prompting
             log_puns (bool, optional): If True Print the generated puns to the terminal. Defaults to True
@@ -303,12 +351,65 @@ class PunGenerator:
             list: List of puns generated
         """
         if self.method == 'prompt':
+            # Ask the LLM to follow a algorithm to generate puns
             self.prompting_llm_algorithmic(prompt_folder, log_puns)
         
         elif self.method == 'homophone_prompt':
-            self.prompting_llm_homophone(prompt_folder, log_puns)
+            # Input homophones, ask LLM to generate puns based on them.
+            self.prompting_llm_homophone(self_refine, prompt_folder, log_puns)
 
         elif self.method == 'homophone':
+            # LLM isn't involved, generate purely algorithmically
             self.get_pun_from_translated_context(log_puns)
 
         return self.pun_list
+
+
+    def self_refine(self, prompt, criteria):
+        """
+        Use SelfRefine to improve an initial GPT response based on iterative self-assessment.
+        
+        Parameters:
+        - prompt (str): The initial prompt to generate the response.
+        - criteria (str): Criteria for self-assessment.
+        - iterations (int): Number of refinement iterations.
+
+        Returns:
+        - Final refined response.
+        """
+        # Step 1: Generate the initial response
+        response = self.execute_llm_call(prompt)
+        logging.info('NEWWW Response - {} '.format(response))
+        # Iterative refinement
+        for i in range(self.refine_iterations):
+            # Step 2: Self-assessment
+            assessment_prompt = f"""
+            Review the Output based on these criteria:
+            {criteria}
+            
+            Output:
+            {response}
+            
+            List issues for each criterion and suggest improvements.
+            """
+            assessment = self.execute_llm_call(assessment_prompt)
+            logging.info('Assessment - {} '.format(assessment))
+            # Step 3: Refinement
+            refinement_prompt = f"""
+            Based on the Assessment, refine the output to address identified issues.
+            
+            Assessment:
+            {assessment}
+            
+            Current Output:
+            {response}
+            
+            Provide a refined version.
+            """
+            refined_response = self.execute_llm_call(refinement_prompt)
+            logging.info('Response - {} '.format(response))
+            # Update the response for the next iteration
+            response = refined_response
+        
+        return response
+

@@ -2,14 +2,18 @@ import tqdm
 import nltk
 import json
 import epitran
+import numpy as np
 import pandas as pd
 
 from thefuzz import fuzz
 from pathlib import Path
 
 from nltk.corpus import brown
+import seaborn as sns
 import matplotlib.pyplot as plt
 from collections import defaultdict
+
+
 
 
 def is_noun(input_word: str):
@@ -199,31 +203,41 @@ def read_and_clean_tsv(dataset_path):
 
     return df
 
-def bar_chart(title: str, scores_dict: dict, file_path: Path):
+def bar_chart(title: str, max_scores_dict: dict, min_scores_dict, mean_scores_dict, file_path: Path):
     """
     Args:
         title (str): title of the box plot
         scores_dict (dict): Maps labels to a list of scores
         file_path (Path): Path where the plot image will be saved
     """
+    sns.set_theme(style="whitegrid", palette="bright6", context="paper", font_scale=2)
     # Get the labels, and the values from the dictionary
-    categories, values = list(scores_dict.keys()), list(scores_dict.values())
-    values = [round(v, 2) for v in values]
-    # Plotting the bar chart
-    plt.figure(figsize=(8, 6))
-    plt.bar(categories, values, color='skyblue')
+    categories, max_values = list(max_scores_dict.keys()), list(max_scores_dict.values()), 
+    min_values, mean_values = list(min_scores_dict.values()), list(mean_scores_dict.values())
+    max_values = [round(v, 2) for v in max_values]
+    min_values = [round(v, 2) for v in min_values]
+    mean_values = [round(v, 2) for v in mean_values]
 
-    # Adding the data values on top of each bar
-    for i in range(len(categories)):
-        plt.text(i, values[i], str(values[i]), ha='center', va='bottom')
 
-    # Adding labels and title
-    plt.xlabel('Categories')
-    plt.ylabel('Mean Ratings')
-    plt.title(title)
+    # the label locations
+    width = 0.25
+    x = np.arange(len(categories))
+    fig, ax = plt.subplots()
+    _ = ax.bar(x - width, mean_values, width, label='Overall')
+    _ = ax.bar(x, max_values, width, label='Top 2')
+    _ = ax.bar(x + width, min_values, width, label='Bottom 2')
 
-    # Displaying the plot
-    plt.savefig(file_path)
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    # ax.set_xlabel('Categories')
+    ax.set_ylabel('Mean Ratings')
+    # ax.set_title(title)
+    ax.set_xticks(x)
+    ax.set_xticklabels(categories)
+    ax.tick_params(axis='x', labelsize=15)
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.1), ncols=3, prop={'size': 13})
+    fig.tight_layout()
+    plt.savefig(file_path, bbox_inches='tight')
+    plt.show()
 
 
 def box_plot(title: str, scores_dict: dict, file_path: Path, remove_human: bool=False):
@@ -234,6 +248,7 @@ def box_plot(title: str, scores_dict: dict, file_path: Path, remove_human: bool=
         file_path (Path): Path where the plot image will be saved
         remove_human (bool, optional): if True, human category removed before plotting. Defaults to False.
     """
+    sns.set_theme(style="whitegrid", palette="bright6", context="paper", font_scale=2)
     # Remove human scores, if normalised data is being plotted
     if remove_human is True:
         scores_dict.pop('Human', None)
@@ -241,16 +256,19 @@ def box_plot(title: str, scores_dict: dict, file_path: Path, remove_human: bool=
     categories, values = list(scores_dict.keys()), list(scores_dict.values())
     
     # Create boxplot
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(8, 6))
     plt.boxplot(values, labels=categories)
 
     # Add title and labels
     plt.title(title)
     plt.xlabel('Category')
-    plt.ylabel('Score')
+    plt.ylabel('Ratings')
 
-    plt.grid(True)
-    plt.savefig(file_path)
+    # plt.grid(True)
+    # plt.savefig(file_path)
+    plt.tight_layout()
+    plt.savefig(file_path, bbox_inches='tight')
+    plt.show()
 
 
 def plot_survey_results(survey_folder: Path, min_human_score: float=3):
@@ -301,27 +319,27 @@ def plot_survey_results(survey_folder: Path, min_human_score: float=3):
             # Cap rating to be max 5
             category_norm_scores[category].append(min(normalised_score, 5))
     
-    temp_file_path = survey_folder / 'raw_ratings_box.png'
+    temp_file_path = survey_folder / 'raw_ratings_box.pdf'
     box_plot(title='Raw Pun Ratings', scores_dict=category_scores,
              file_path=temp_file_path, remove_human=False)
 
-    temp_file_path = survey_folder / 'norm_ratings_box.png'
+    temp_file_path = survey_folder / 'norm_ratings_box.pdf'
     box_plot(title='Normalised Pun Ratings Per Category', scores_dict=category_norm_scores,
              file_path=temp_file_path, remove_human=True)
 
     # Mean scores per category and plot bar chart - works
-    temp_file_path = survey_folder / 'mean_ratings.png'
-    mean_scores = {category: sum(scores)/ len(scores) for category, scores in category_scores.items()}
-    bar_chart(title='Mean Ratings per Category', scores_dict=mean_scores, file_path=temp_file_path)
+    # temp_file_path = survey_folder / 'mean_ratings.pdf'
+    # mean_scores = {category: sum(scores)/ len(scores) for category, scores in category_scores.items()}
 
-    # Get Max and Min scores per category and plot bar chats on means of them
-    sorted_scores = {category: sorted(scores, reverse=True) for category, scores in category_scores.items()}
-    min_mean_scores = {category: sum(scores[-2:])/2 for category, scores in sorted_scores.items()}
-    max_mean_scores = {category: sum(scores[:2])/2 for category, scores in sorted_scores.items()}
+    # # Get Max and Min scores per category and plot bar chats on means of them
+    # sorted_scores = {category: sorted(scores, reverse=True) for category, scores in category_scores.items()}
+    # min_mean_scores = {category: sum(scores[-2:])/2 for category, scores in sorted_scores.items()}
+    # max_mean_scores = {category: sum(scores[:2])/2 for category, scores in sorted_scores.items()}
 
-    temp_file_path = survey_folder / 'max_2_mean_ratings.png'
-    bar_chart(title='Mean of the Top 2 Scores per Category', scores_dict=max_mean_scores,
-                   file_path=temp_file_path)
-    temp_file_path = survey_folder / 'min_2_mean_ratings.png'    
-    bar_chart(title='Mean of the Top 2 Scores per Category', scores_dict=min_mean_scores,
-                   file_path=temp_file_path)    
+    # bar_chart('Mean Ratings per Category', max_mean_scores, min_mean_scores, mean_scores, temp_file_path)
+    # temp_file_path = survey_folder / 'max_2_mean_ratings.png'
+    # bar_chart(title='Mean of the Top 2 Scores per Category', scores_dict=max_mean_scores,
+    #               file_path=temp_file_path)
+    # temp_file_path = survey_folder / 'min_2_mean_ratings.png'    
+    # bar_chart(title='Mean of the Top 2 Scores per Category', scores_dict=min_mean_scores,
+     #              file_path=temp_file_path)

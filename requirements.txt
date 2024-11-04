@@ -8,3 +8,7 @@ epitran
 openai
 matplotlib
 deep_translator
+transformers
+gensim
+seaborn
+torch
