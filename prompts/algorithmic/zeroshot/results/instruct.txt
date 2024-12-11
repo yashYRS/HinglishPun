@@ -1,0 +1,21 @@
+Step 1:
+EN: Pen
+HI: पेन (pronounced as "pen")
+HI_TO_EN: Pen
+
+Step 2:
+EN: Book
+HI: बुक (pronounced as "book")
+HI_TO_EN: Book
+
+Step 3:
+Sentence: I love to write with my pen.
+Sentence: मैं अपने पेन से लिखने का शौकीन हूँ।
+
+Step 4:
+Sentence: I love to write with my pen.
+Sentence: मैं अपने पेन से लिखने का शौकीन हूँ।
+
+Step 5:
+Noun Replacement: Stationery
+Final Pun: मैं अपने स्टेशनरी से लिखने का शौकीन हूँ। (I love to write with my stationery.)

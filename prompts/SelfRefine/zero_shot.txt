@@ -1,0 +1,4 @@
+- Pun present: Does the text have a pun ?
+- Homophone found: Was I able to find a homophone in the text ? 
+- Coherent: Is the text coherent ? 
+- Funny: Was I able to create a good pun ?

@@ -1,0 +1,16 @@
+Step 1:
+EN: "pear"
+HI: "पेयर" (pronounced as "pear")
+HI_TO_EN: "fruit"
+
+Step 2:
+"fruit" and "pear" are not the same, proceed to Step 3
+
+Step 3:
+Short sentence with "EN" as the object: "She picked a ripe pear from the tree."
+
+Step 4:
+Replace EN with HI: "She picked a ripe पेयर from the tree."
+
+Step 5:
+Output: "She picked a ripe फल from the tree."

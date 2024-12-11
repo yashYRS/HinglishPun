@@ -1,0 +1,14 @@
+nltk
+thefuzz
+pandas
+python-dotenv
+g2pk
+jamo
+epitran
+openai
+matplotlib
+deep_translator
+transformers
+gensim
+seaborn
+torch

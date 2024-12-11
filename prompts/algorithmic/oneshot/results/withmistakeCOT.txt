@@ -1,0 +1,601 @@
+Step 1:
+EN: "pen"
+HI: "पेन" (pronounced as "pen")
+HI_TO_EN: "pen"
+
+Step 2:
+"pen" and "pen" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "apple"
+HI: "एप्पल" (pronounced as "apple")
+HI_TO_EN: "apple"
+
+Step 2:
+"apple" and "apple" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "car"
+HI: "कार" (pronounced as "car")
+HI_TO_EN: "car"
+
+Step 2:
+"car" and "car" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "mouse"
+HI: "माउस" (pronounced as "maus")
+HI_TO_EN: "mouse"
+
+Step 2:
+"mouse" and "mouse" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "book"
+HI: "बुक" (pronounced as "book")
+HI_TO_EN: "book"
+
+Step 2:
+"book" and "book" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "key"
+HI: "की" (pronounced as "ki")
+HI_TO_EN: "key"
+
+Step 2:
+"key" and "key" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "fan"
+HI: "फैन" (pronounced as "fan")
+HI_TO_EN: "fan"
+
+Step 2:
+"fan" and "fan" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "ball"
+HI: "बॉल" (pronounced as "ball")
+HI_TO_EN: "ball"
+
+Step 2:
+"ball" and "ball" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "glass"
+HI: "ग्लास" (pronounced as "glass")
+HI_TO_EN: "glass"
+
+Step 2:
+"glass" and "glass" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "phone"
+HI: "फोन" (pronounced as "phone")
+HI_TO_EN: "phone"
+
+Step 2:
+"phone" and "phone" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "table"
+HI: "टेबल" (pronounced as "table")
+HI_TO_EN: "table"
+
+Step 2:
+"table" and "table" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "chair"
+HI: "चेयर" (pronounced as "chair")
+HI_TO_EN: "chair"
+
+Step 2:
+"chair" and "chair" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "shirt"
+HI: "शर्ट" (pronounced as "shirt")
+HI_TO_EN: "shirt"
+
+Step 2:
+"shirt" and "shirt" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "clock"
+HI: "क्लॉक" (pronounced as "clock")
+HI_TO_EN: "clock"
+
+Step 2:
+"clock" and "clock" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "door"
+HI: "दरवाज़ा" (pronounced as "darwaza")
+HI_TO_EN: "door"
+
+Step 2:
+"door" and "door" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "window"
+HI: "विंडो" (pronounced as "window")
+HI_TO_EN: "window"
+
+Step 2:
+"window" and "window" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "tablet"
+HI: "टैबलेट" (pronounced as "tablet")
+HI_TO_EN: "tablet"
+
+Step 2:
+"tablet" and "tablet" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "bag"
+HI: "बैग" (pronounced as "bag")
+HI_TO_EN: "bag"
+
+Step 2:
+"bag" and "bag" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "window"
+HI: "विंडो" (pronounced as "window")
+HI_TO_EN: "window"
+
+Step 2:
+"window" and "window" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "table"
+HI: "टेबल" (pronounced as "table")
+HI_TO_EN: "table"
+
+Step 2:
+"table" and "table" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "fan"
+HI: "फैन" (pronounced as "fan")
+HI_TO_EN: "fan"
+
+Step 2:
+"fan" and "fan" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "mouse"
+HI: "माउस" (pronounced as "maus")
+HI_TO_EN: "mouse"
+
+Step 2:
+"mouse" and "mouse" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "book"
+HI: "बुक" (pronounced as "book")
+HI_TO_EN: "book"
+
+Step 2:
+"book" and "book" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "key"
+HI: "की" (pronounced as "ki")
+HI_TO_EN: "key"
+
+Step 2:
+"key" and "key" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "ball"
+HI: "बॉल" (pronounced as "ball")
+HI_TO_EN: "ball"
+
+Step 2:
+"ball" and "ball" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "glass"
+HI: "ग्लास" (pronounced as "glass")
+HI_TO_EN: "glass"
+
+Step 2:
+"glass" and "glass" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "phone"
+HI: "फोन" (pronounced as "phone")
+HI_TO_EN: "phone"
+
+Step 2:
+"phone" and "phone" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "table"
+HI: "टेबल" (pronounced as "table")
+HI_TO_EN: "table"
+
+Step 2:
+"table" and "table" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "chair"
+HI: "चेयर" (pronounced as "chair")
+HI_TO_EN: "chair"
+
+Step 2:
+"chair" and "chair" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "shirt"
+HI: "शर्ट" (pronounced as "shirt")
+HI_TO_EN: "shirt"
+
+Step 2:
+"shirt" and "shirt" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "clock"
+HI: "क्लॉक" (pronounced as "clock")
+HI_TO_EN: "clock"
+
+Step 2:
+"clock" and "clock" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "door"
+HI: "दरवाज़ा" (pronounced as "darwaza")
+HI_TO_EN: "door"
+
+Step 2:
+"door" and "door" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "window"
+HI: "विंडो" (pronounced as "window")
+HI_TO_EN: "window"
+
+Step 2:
+"window" and "window" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "tablet"
+HI: "टैबलेट" (pronounced as "tablet")
+HI_TO_EN: "tablet"
+
+Step 2:
+"tablet" and "tablet" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "bag"
+HI: "बैग" (pronounced as "bag")
+HI_TO_EN: "bag"
+
+Step 2:
+"bag" and "bag" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "window"
+HI: "विंडो" (pronounced as "window")
+HI_TO_EN: "window"
+
+Step 2:
+"window" and "window" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "table"
+HI: "टेबल" (pronounced as "table")
+HI_TO_EN: "table"
+
+Step 2:
+"table" and "table" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "fan"
+HI: "फैन" (pronounced as "fan")
+HI_TO_EN: "fan"
+
+Step 2:
+"fan" and "fan" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "mouse"
+HI: "माउस" (pronounced as "maus")
+HI_TO_EN: "mouse"
+
+Step 2:
+"mouse" and "mouse" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "book"
+HI: "बुक" (pronounced as "book")
+HI_TO_EN: "book"
+
+Step 2:
+"book" and "book" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "key"
+HI: "की" (pronounced as "ki")
+HI_TO_EN: "key"
+
+Step 2:
+"key" and "key" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "ball"
+HI: "बॉल" (pronounced as "ball")
+HI_TO_EN: "ball"
+
+Step 2:
+"ball" and "ball" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "glass"
+HI: "ग्लास" (pronounced as "glass")
+HI_TO_EN: "glass"
+
+Step 2:
+"glass" and "glass" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "phone"
+HI: "फोन" (pronounced as "phone")
+HI_TO_EN: "phone"
+
+Step 2:
+"phone" and "phone" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "table"
+HI: "टेबल" (pronounced as "table")
+HI_TO_EN: "table"
+
+Step 2:
+"table" and "table" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "chair"
+HI: "चेयर" (pronounced as "chair")
+HI_TO_EN: "chair"
+
+Step 2:
+"chair" and "chair" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "shirt"
+HI: "शर्ट" (pronounced as "shirt")
+HI_TO_EN: "shirt"
+
+Step 2:
+"shirt" and "shirt" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "clock"
+HI: "क्लॉक" (pronounced as "clock")
+HI_TO_EN: "clock"
+
+Step 2:
+"clock" and "clock" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "door"
+HI: "दरवाज़ा" (pronounced as "darwaza")
+HI_TO_EN: "door"
+
+Step 2:
+"door" and "door" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "window"
+HI: "विंडो" (pronounced as "window")
+HI_TO_EN: "window"
+
+Step 2:
+"window" and "window" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "tablet"
+HI: "टैबलेट" (pronounced as "tablet")
+HI_TO_EN: "tablet"
+
+Step 2:
+"tablet" and "tablet" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "bag"
+HI: "बैग" (pronounced as "bag")
+HI_TO_EN: "bag"
+
+Step 2:
+"bag" and "bag" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "window"
+HI: "विंडो" (pronounced as "window")
+HI_TO_EN: "window"
+
+Step 2:
+"window" and "window" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "table"
+HI: "टेबल" (pronounced as "table")
+HI_TO_EN: "table"
+
+Step 2:
+"table" and "table" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "fan"
+HI: "फैन" (pronounced as "fan")
+HI_TO_EN: "fan"
+
+Step 2:
+"fan" and "fan" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "mouse"
+HI: "माउस" (pronounced as "maus")
+HI_TO_EN: "mouse"
+
+Step 2:
+"mouse" and "mouse" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "book"
+HI: "बुक" (pronounced as "book")
+HI_TO_EN: "book"
+
+Step 2:
+"book" and "book" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "key"
+HI: "की" (pronounced as "ki")
+HI_TO_EN: "key"
+
+Step 2:
+"key" and "key" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "ball"
+HI: "बॉल" (pronounced as "ball")
+HI_TO_EN: "ball"
+
+Step 2:
+"ball" and "ball" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "glass"
+HI: "ग्लास" (pronounced as "glass")
+HI_TO_EN: "glass"
+
+Step 2:
+"glass" and "glass" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "phone"
+HI: "फोन" (pronounced as "phone")
+HI_TO_EN: "phone"
+
+Step 2:
+"phone" and "phone" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "table"
+HI: "टेबल" (pronounced as "table")
+HI_TO_EN: "table"
+
+Step 2:
+"table" and "table" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "chair"
+HI: "चेयर" (pronounced as "chair")
+HI_TO_EN: "chair"
+
+Step 2:
+"chair" and "chair" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "shirt"
+HI: "शर्ट" (pronounced as "shirt")
+HI_TO_EN: "shirt"
+
+Step 2:
+"shirt" and "shirt" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "clock"
+HI: "क्लॉक" (pronounced as "clock")
+HI_TO_EN: "clock"
+
+Step 2:
+"clock" and "clock" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "door"
+HI: "दरवाज़ा" (pronounced as "darwaza")
+HI_TO_EN: "door"
+
+Step 2:
+"door" and "door" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "window"
+HI: "विंडो" (pronounced as "window")
+HI_TO_EN: "window"
+
+Step 2:
+"window" and "window" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "tablet"
+HI: "टैबलेट" (pronounced as "tablet")
+HI_TO_EN: "tablet"
+
+Step 2:
+"tablet" and "tablet" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "bag"
+HI: "बैग" (pronounced as "bag")
+HI_TO_EN: "bag"
+
+Step 2:
+"bag" and "bag" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "window"
+HI: "विंडो" (pronounced as "window")
+HI_TO_EN: "window"
+
+Step 2:
+"window" and "window" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "table"
+HI: "टेबल" (pronounced as "table")
+HI_TO_EN: "table"
+
+Step 2:
+"table" and "table" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "fan"
+HI: "फैन" (pronounced as "fan")
+HI_TO_EN: "fan"
+
+Step 2:
+"fan" and "fan" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "mouse"
+HI: "माउस" (pronounced as "maus")
+HI_TO_EN: "mouse"
+
+Step 2:
+"mouse" and "mouse" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "book"
+HI: "बुक" (pronounced as "book")
+HI_TO_EN: "book"
+
+Step 2:
+"book" and "book" are the same, redo Step 1
+
+Step 1 (redo):
+EN: "key"
+HI: "की" (pronounced as "ki")
+HI_TO_EN: "key"
+
+Step 2:
+"key" and "key" are the same, redo Step 1
+
+Step

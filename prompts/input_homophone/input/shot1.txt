@@ -1,0 +1,7 @@
+Generate a Code mixed Hindi English Pun based on the homophones provided as input. 
+Some example input output pairs are provided as reference.
+"""
+Example 1:
+Input: "Casio" (Electronics brand), "Kaisi ho" (How are you)
+Output: "What did one calculator said to another? CASIO"
+"""

@@ -1,0 +1,27 @@
+Construct a code mixed Hindi English pun based on the instructions given.
+Steps 
+1. Create a triplet of a English word "EN", a Hindi word "HI" that is a homophone to the English word and the translation of the Hindi word in English "HI_TO_EN".
+2. If "HI_TO_EN" and "EN" are the same, redo step 1, else proceed to step 3.
+3. Make short sentences (less than 10 words), with "EN" as the object of the sentence.
+4. Replace "EN" with the "HI"
+5. Replace the Noun Phrase at the start of the sentence with a contextualised phrase that is highly related to the "HI_TO_EN" word.
+
+An example is given below
+"""
+Step 1:
+EN: "dude"
+HI: "दूध" (pronounced as "doodh")
+HI_TO_EN: "milk"
+
+Step 2: 
+"milk" and "dude" are not the same, proceed to Step 3
+
+Step 3:
+Short sentence with "EN" as the object: "Korbin asked - `Whats up dude ?`"
+
+Step 4:
+Replace EN with HI: "Korbin asked - `Whats up दूध (dude) ?`"
+
+Step 5:
+Output: "The cow asked - `Whats up दूध (dude) ?`"
+"""

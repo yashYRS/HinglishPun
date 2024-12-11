@@ -1,0 +1,16 @@
+Step 1:
+EN: "apple"
+HI: "एपिल" (pronounced as "ae-pil")
+HI_TO_EN: "april"
+
+Step 2: 
+"april" and "apple" are not the same, proceed to Step 3
+
+Step 3:
+Short sentence with "EN" as the object: "She took a bite of the apple"
+
+Step 4:
+Replace EN with HI: "She took a bite of the एपिल (apple)"
+
+Step 5:
+Output: "She took a bite of the एपिल (april)"

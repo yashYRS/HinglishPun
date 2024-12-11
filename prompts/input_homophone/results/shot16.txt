@@ -1,0 +1,12 @@
+Input: "tail", "tel" (Oil)
+Output: "Why did the dog wag its TAIL? Because it found TEL and thought it was food."
+Input: "gained", "gend" (ball)
+Output: "What did the cricket ball say after getting hit for a six? GAINED"
+Input: "beach", "bich" (between)
+Output: "Why did the sand feel lonely? Because it was stuck in the BEACH of two shores."
+Input: "legal", "ling" (gender)
+Output: "Why did the lawyer go to the language class? To understand LEGAL or LING?"
+Input: "law", "lau" (flame)
+Output: "When the fire broke out, the lawyer said LAU and Order"
+Input: "deal", "dil" (Heart)
+Why did the heart go shopping? Because it was looking for some good "deals" to mend its broken "dil"!

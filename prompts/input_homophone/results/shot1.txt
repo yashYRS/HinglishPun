@@ -1,0 +1,18 @@
+Input: "stage", "tej" (fast)
+Output: "Why did the actor refuse to perform on the STAGE? Because it was too TEJ!"
+Input: "settle", "sthal" (place)
+Output: "Why did the furniture decide to stay in one place? Because it wanted to SETTLE in its STHAL"
+Input: "male", "mel" (Match)
+Output: "Why did the man go to the fruit market? To find his perfect MEL!"
+Input: "law", "lau" (flame)
+Output: "Why did the fire get arrested? Because it broke the LAU!"
+Input: "key", "kee" (Many)
+Output: "Why did the lock break up with the door? It said 'KEY' to many 'KEE'"
+Input: "gained", "gend" (ball)
+Output: "Why did the cricket ball feel left out? Because it was GEND and not GAINED"
+Input: "legal", "ling" (gender)
+Output: "Why did the lawyer break up with the dictionary? It was too LEGAListic about the LINGuistics"
+Input: "tail", "tel" (Oil)
+Output: "Why did the oil spill go to the tailor? TAIL"
+Input: "beach", "bich" (between)
+Output: "Why did the sand go to therapy? It had a bich at the beach"

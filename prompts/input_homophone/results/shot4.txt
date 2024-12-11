@@ -1,0 +1,14 @@
+Input: "beach", "bich" (between)
+Output: "Why did the sand feel lonely? Because it was stuck in the BEACH BICH"
+Input: "gained", "gend" (ball)
+Output: "Why did the cricket player feel happy after scoring runs? Because he GAINED the GEND"
+Input: "key", "kee" (Many)
+Output: "Why did the locksmith have trouble opening the door with just one KEY? Because he needed KEE more!"
+Input: "legal", "ling" (gender)
+Output: "Why did the lawyer start learning a new language? Because LEGAL advice in LING language is always better."
+Input: "law", "lau" (flame)
+Output: "Why did the fire go to school? To learn about LAU and order"
+Input: "tail", "tel" (Oil)
+Output: "Why did the oil go to the party? To TEL everyone how slippery it can be"
+Input: "male", "mel" (Match)
+Output: "Why did the man go to the fruit market? To find a perfect MEL"

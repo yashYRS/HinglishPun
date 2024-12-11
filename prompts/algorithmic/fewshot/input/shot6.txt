@@ -1,0 +1,122 @@
+Construct a code mixed Hindi English pun based on the instructions given.
+Steps 
+1. Create a triplet of a English word "EN", a Hindi word "HI" that is a homophone to the English word and the translation of the Hindi word in English "HI_TO_EN".
+2. If "HI_TO_EN" and "EN" are the same, redo step 1, else proceed to step 3.
+3. Make short sentences (less than 10 words), with "EN" as the object of the sentence.
+4. Replace "EN" with the "HI"
+5. Replace the Noun Phrase at the start of the sentence with a contextualised phrase that is highly related to the "HI_TO_EN" word.
+
+An example is given below
+"""
+Step 1:
+EN: "dude"
+HI: "दूध" (pronounced as "doodh")
+HI_TO_EN: "milk"
+
+Step 2: 
+"milk" and "dude" are not the same, proceed to Step 3
+
+Step 3:
+Short sentence with "EN" as the object: "Korbin asked - `Whats up dude ?`"
+
+Step 4:
+Replace EN with HI: "Korbin asked - `Whats up दूध (dude) ?`"
+
+Step 5:
+Output: "The cow asked - `Whats up दूध (dude) ?`"
+"""
+"""
+Example 2:
+    Step 1:
+    EN: "city"
+    HI: "सीटी" (pronounced as "seeti")
+    HI_TO_EN: "whistle"
+
+    Step 2: 
+    "city" and "whistle" are not the same, proceed to Step 3
+
+    Step 3:
+    Short sentence with "EN" as the object: "Rick lives in the heart of the city"
+
+    Step 4:
+    Replace EN with HI: "Rick lives in the heart of the सीटी (city)"
+
+    Step 5:
+    Output: "The whistleblower lives in the heart of the सीटी (city)"
+"""
+"""
+Example 3:
+    Step 1:
+    EN: "guy"
+    HI: "गाय" (pronounced as "gaay")
+    HI_TO_EN: "cow"
+
+    Step 2: 
+    "cow" and "guy" are not the same, proceed to Step 3
+
+    Step 3:
+    Short sentence with "EN" as the object: "She invited the new guy to the party"
+
+    Step 4:
+    Replace EN with HI: "She invited the new गाय (guy) to the party"
+
+    Step 5:
+    Output: "The farmer invited the new गाय (guy) to the party"
+"""
+"""
+Example 4:
+    Step 1:
+    EN: "melon"
+    HI: "मिलन" (pronounced as "milun")
+    HI_TO_EN: "meetup"
+
+    Step 2: 
+    "meetup" and "melon" are not the same, proceed to Step 3
+
+    Step 3:
+    Short sentence with "EN" as the object: "We had a lovely watermelon"
+
+    Step 4:
+    Replace EN with HI: "We had a lovely waterमिलन (watermelon)"
+
+    Step 5:
+    Output: "The fishes had a lovely waterमिलन (watermelon)"
+"""
+"""
+Example 5:
+    Step 1:
+    EN: "ash"
+    HI: "ऐश" (pronounced as "aish")
+    HI_TO_EN: "chill"
+
+    Step 2: 
+    "chill" and "ash" are not the same, proceed to Step 3
+
+    Step 3:
+    Short sentence with "EN" as the object: "The janitor brushed away the ash"
+
+    Step 4:
+    Replace EN with HI: "The janitor brushed away the ऐश (ash)"
+
+    Step 5:
+    Output: "The loss brushed away the ऐश (ash)"
+"""
+"""
+Example 6:
+    Step 1:
+    EN: "saw"
+    HI: "सौ" (pronounced as "saw")
+    HI_TO_EN: "hundred"
+
+    Step 2: 
+    "saw" and "hundred" are not the same, proceed to Step 3
+
+    Step 3:
+    Short sentence with "EN" as the object: "The carpenters had a saw machine"
+
+    Step 4:
+    Replace EN with HI: "The carpenters had a सौ (saw) machine"
+
+    Step 5:
+    Output: "The crickters had a सौ (saw) machine"
+"""

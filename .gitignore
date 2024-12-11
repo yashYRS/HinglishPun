@@ -1,0 +1,5 @@
+.DS_Store
+.env
+flite**
+.venv/**
+data/L3Cubedata/**

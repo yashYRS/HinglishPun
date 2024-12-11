@@ -1,0 +1,4 @@
+- Pun present: Does the text have a pun ?
+- Algorithm : Am I following the algorithm ?
+- Coherent: Is the text coherent ? 
+- Funny: Was I able to create a good pun ?

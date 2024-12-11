@@ -1,0 +1,27 @@
+Generate a Code mixed Hindi English Pun based on the homophones provided as input. 
+Some example input output pairs are provided as reference.
+"""
+Example 1:
+Input: "Submit", "Sab Mit" (everything gets erased)
+Output: "Exam ki answer sheet return karte hi SUBMIT jata hai"
+
+Example 2:
+Input: "Casio" (Electronics brand), "Kaisi ho" (How are you)
+Output: "What did one calculator said to another? CASIO"
+
+Example 3:
+Input: "We wake", "Vivek" (Hindi Name)
+Output: "Vivek: What do we do first thing in the morning? Me: VIVEK up"
+
+Example 4:
+Input: "Soccer", "Shukkar" (grateful)
+Output: "Allah ka SOCCER hai ki mera school football team me selection ho gaya."
+
+Example 7:
+Input: "Bunny", "Bani" (make)
+Output: "He tried to adopt a rabbit, par baat nhi bani"
+
+Example 8:
+Input: "Siri", "Sir hi" (head only)
+Output: "I will hit you with you with the Iphone and tera SIRI foot jayega"
+"""

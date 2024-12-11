@@ -1,0 +1,14 @@
+Input: "gained", "gend" (ball)
+I gained a lot of weight playing gend, now I'm a rounder player!
+Input: "tail", "tel" (Oil)
+Why did the cat put oil in its hair? Because it wanted a sleek and tel look!
+Input: "male", "mel" (Match)
+Why did the male go to the bakery? Because he wanted to mel some bread!
+Input: "key", "kee" (Many)
+Why did the locksmith bring a bunch of "key"s to the party? Because there were "kee" (Many) people there and he wanted to make sure everyone had a way in!
+Input: "legal", "ling" (gender)
+Why did the legal document break up with the ling? Because it couldn't handle the gender bias!
+Input: "law", "lau" (flame)
+Why did the lawyer go to the beach? To catch some "lau" and order a "law"ng island iced tea!
+Input: "beach", "bich" (between)
+Why did the sand go to the party? Because it heard the music was playing bich the beach!

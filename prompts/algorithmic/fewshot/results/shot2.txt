@@ -1,0 +1,16 @@
+Step 1:
+EN: "bear"
+HI: "बार" (pronounced as "bar")
+HI_TO_EN: "pub"
+
+Step 2: 
+"pub" and "bear" are not the same, proceed to Step 3
+
+Step 3:
+Short sentence with "EN" as the object: "The bear loves honey"
+
+Step 4:
+Replace EN with HI: "The बार (bear) loves honey"
+
+Step 5:
+Output: "The bartender loves honey"
